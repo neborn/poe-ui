@@ -1,3 +1,7 @@
+
+-include $(CURDIR)/.env
+NODE_ENV ?= production
+
 PROJECT      ?= $(notdir $(CURDIR))
 DESCRIPTION  ?= A poe ui app
 ORGANIZATION ?= $(PROJECT)
@@ -11,8 +15,8 @@ PARTIAL_FILES = $(shell find public -type f -name '*.jade')
 
 POE_UI         = $(CURDIR)/node_modules/poe-ui
 POE_UI_BIN     = $(POE_UI)/node_modules/.bin
-COMP_FILTER	  = $(POE_UI)/node_modules/component-filter
-STYLE_BUILDER    ?= $(POE_UI)/node_modules/shoelace-stylus
+COMP_FILTER	   = $(POE_UI)/node_modules/component-filter
+STYLE_BUILDER ?= $(POE_UI)/node_modules/shoelace-stylus
 
 DIRS  = $(shell find $(POE_UI)/files -type d -name '*[a-zA-Z]' | sed 's:^$(POE_UI)/files/::')
 FILES = $(shell find $(POE_UI)/files -type f                   | sed 's:^$(POE_UI)/files/::')
@@ -41,7 +45,11 @@ prod    : build build/require.min.js build/app.min.js build/style.min.css build/
 install : node_modules components
 
 start: build .env
-	@foreman start
+ifeq ($(NODE_ENV),development)
+	@foreman start --root $(CURDIR) --env $(CURDIR)/.env --procfile $(POE_UI)/lib/Procfile.dev
+else
+	@foreman start --root $(CURDIR) --env $(CURDIR)/.env --procfile $(POE_UI)/lib/Procfile
+endif
 
 .env: .env.example
 	@cp $< $@
