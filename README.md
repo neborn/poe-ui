@@ -34,6 +34,31 @@ $ foreman start
 $ open http://localhost:5000
 ```
 
+
+Or simply:
+
+```sh
+$ make clean start
+```
+
+## .netrc
+
+Poe-ui uses web components via `require` from **[component.io](http://compopnent.io)** repos hosted at github.
+
+To consume any private components, you will need to add/edit your user's **.netrc** file.
+
+#### Add an entry to your user's `.netrc` file.
+
+1. Go to [your **github** Account Settings](https://github.com/settings/applications).
+1. Click **Generate new token**. Give it a name for your records.
+1. Add or edit `~/.netrc`
+
+```yaml
+machine api.github.com
+  login {generated token}
+  password x-oauth-basic
+```
+
 Useful Links
 ------------
 
