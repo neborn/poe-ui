@@ -158,6 +158,7 @@ function initLR(app) {
   if (envs('NODE_ENV') !== 'development' || envs('DISABLE_LR')) {
     app.watch = function() {};
     app.watchDir = function() {};
+    return;
   }
 
   try {
